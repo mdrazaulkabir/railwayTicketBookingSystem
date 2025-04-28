@@ -29,7 +29,7 @@ void main(){
 
     print('Chose an option (1-10):');
     int Chose=int.parse(stdin.readLineSync()!);
-    if(Chose==1);
+    if(Chose==1)viewTrains(trains);
     else if(Chose==2);
     else if(Chose==3);
     else if(Chose==4);
@@ -46,5 +46,26 @@ void main(){
     else{
       print("Invalid choice! Try again!");
     }
+  }
+}
+
+void viewTrains(List<Map<String,dynamic>>trains){
+  print('....view Tains....');
+  for(int i=0;i<trains.length;i++){
+    var t=trains[i];
+    print('${i+1} Trains Name: ${t['name']} \tRoute is:${t['route']} \tDeparture time:${t['time']}');
+  }
+}
+
+int? choiceTrains(List<Map<String,dynamic>>trains){
+  viewTrains(trains);
+  print("Enter your choice train");
+  int index=int.parse(stdin.readLineSync()?? '');
+  if(index!=null&&index<trains.length){
+    return index-1;
+  }
+  else{
+    print('Invalid choice. Try again!');
+    return null;
   }
 }
