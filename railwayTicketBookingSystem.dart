@@ -5,13 +5,18 @@ void main(){
       'name':'InterCity Express',
       'route':'Dhaka -> Sylhet',
       "time":'08:30 AM',
-      'seats':{for(int i=1;i<=10;i++) i:null }
+      'seats':<int,String?>{for(int i=1;i<=10;i++) i:null }
+      /*
+       i: null → in each iteration, creates a key-value pair:
+        i is the seat number (1 to 10).
+        null means the seat is unbooked.
+       */      
     },
     {
       'name':'Padma Express',
       'route':'Sylhet -> Borishal',
       'time':'09:30 AM',
-      'seats':{for(int i=1;i>=10;i++)i:null}
+      'seats':<int,String?>{for(int i=1;i<=10;i++)i:null}
     }
   ];
   while(true){
@@ -31,7 +36,7 @@ void main(){
     int Chose=int.parse(stdin.readLineSync()!);
     if(Chose==1)viewTrains(trains);
     else if(Chose==2)viewSeats(trains);
-    else if(Chose==3);
+    else if(Chose==3)bookSeats(trains);
     else if(Chose==4);
     else if(Chose==5);
     else if(Chose==6);
@@ -65,7 +70,7 @@ int? choiceTrains(List<Map<String,dynamic>>trains){
   viewTrains(trains);
   print("Enter your choice train");
   int index=int.parse(stdin.readLineSync()?? '');
-  if(index!=null&&index<trains.length){
+  if(index!=null&&index<=trains.length){
     return index-1;
   }
   else{
@@ -83,9 +88,49 @@ void viewSeats(List<Map<String,dynamic>>trains){
     return;
   }
   var seats=trains[tIndex]['seats'] as Map <int,String?>;
-  print("Seat Availability for ${trains[tIndex]['name']}");
+  print("Seat Availability for ${trains[tIndex]['name']}:");
   for(int i=1;i<=seats.length;i++){
     String status=seats[i]==null? "Available":"Booked by ${seats[i]}";
-    print("Seat is ${status}");
+    print("Seat -> $i ${status}");
+  }
+}
+
+
+void bookSeats(List<Map<String,dynamic>>trains){
+  int? tIndex=choiceTrains(trains);
+  if(tIndex==null){
+    print('Empty Trains!');
+    return;
+  }
+  print('Enter your name:');
+  String? name=stdin.readLineSync();
+  print('Enter your seat number to booking like (2,4)');
+  List<String>inputs=(stdin.readLineSync()?? '').split(',');
+ 
+  var seats=trains[tIndex]['seats'] as Map<int,String?>;
+  List<int>booked=[];
+  for(String seatStr in inputs){
+    int seatNum=int.parse(seatStr.trim());
+    if(seatNum!=null&& seats.containsKey(seatNum)){
+
+          if(seats[seatNum]==null){
+            seats[seatNum]=name;
+            booked.add(seatNum);
+          }
+          else{
+            print('Seat number $seatNum is already booked by ${seats[seatNum]}');
+          }
+      
+    }
+    else{
+      print('Invalid seat number:$seatNum');
+    }
+  }
+  
+  if(booked.isNotEmpty){
+    print("Booked seats ${booked.join(',')} for $name on ${trains[tIndex]['name']}");
+  }
+  else{
+    print('No seats were booked!');
   }
 }
