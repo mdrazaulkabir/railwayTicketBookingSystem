@@ -37,8 +37,8 @@ void main(){
     if(Chose==1)viewTrains(trains);
     else if(Chose==2)viewSeats(trains);
     else if(Chose==3)bookSeats(trains);
-    else if(Chose==4);
-    else if(Chose==5);
+    else if(Chose==4)cancelSeat(trains);
+    else if(Chose==5)viewAllBookedSeat(trains);
     else if(Chose==6);
     else if(Chose==7);
     else if(Chose==8);
@@ -134,3 +134,47 @@ void bookSeats(List<Map<String,dynamic>>trains){
     print('No seats were booked!');
   }
 }
+
+ 
+void cancelSeat(List<Map<String,dynamic>>trains){
+  int? tIndex=choiceTrains(trains);
+  if(tIndex==null){
+    print("Invalid and Empty!");
+    return;
+  }
+  print("Enter the seat number which want to cancel:");
+  int seatNum=int.parse(stdin.readLineSync()??'');
+  var seats=trains[tIndex]['seats'] as Map<int,String?>;
+  //print(seats);
+
+  if(seatNum==null||!seats.containsKey(seatNum)){
+    print('Invalid Input!');
+    return;
+  }  
+      if(seats[seatNum]==null){
+        print("Seat $seatNum is already available!");
+        return;
+      }
+      
+        print("Seats ${seats[seatNum]} was booked.Now seat $seatNum cancel successfully!");
+        seats[seatNum]=null;
+}
+
+void viewAllBookedSeat(List<Map<String,dynamic>>trains){
+  int? tIndex=choiceTrains(trains);
+  if(tIndex==null){
+    print("Invalid!");
+    return;
+  }
+
+  for(var train in trains){
+    var seats=train['seats'] as Map<int,String?>;
+    print("Train ${train['name'].toString().padRight(10)} Route : ${train['route'].toString().padRight(10)}");
+    seats.forEach((seat, name) {
+      if(name!=null){
+        print("Seat number $seat booked by $name");
+      }
+     });
+  }
+  
+  }
